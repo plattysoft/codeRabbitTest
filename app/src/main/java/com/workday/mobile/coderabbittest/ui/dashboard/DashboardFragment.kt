@@ -4,9 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.workday.mobile.coderabbittest.R
 import com.workday.mobile.coderabbittest.databinding.FragmentDashboardBinding
 
 class DashboardFragment : Fragment() {
@@ -22,17 +23,16 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        val dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
+        val dashboardViewModel = ViewModelProvider(this)[DashboardViewModel::class.java]
 
-        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        val rootView = inflater.inflate(R.layout.fragment_dashboard, container, false)
+        val someView = rootView.findViewById<ComposeView>(R.id.text_dashboard)
 
-        val textView: TextView = binding.textDashboard
-        dashboardViewModel.text.observe(viewLifecycleOwner) {
-            textView.text = it
+        someView.setContent {
+            DashboardScreen(dashboardViewModel)
         }
-        return root
+
+        return rootView
     }
 
     override fun onDestroyView() {
